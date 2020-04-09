@@ -20,7 +20,7 @@ public class DemoApplicationTests {
 
     @Test
     public void testUser() {
-        User user = userService.getUserInfo("zhangsan", "456");
+        User user = userService.getUserInfo("zhangsan", "455");
         System.out.println("----"+user);
 
     }
