@@ -4,8 +4,9 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.example.common.model.dto.BaseResDTO;
 import com.example.common.model.dto.req.QueryUserReqDTO;
 import com.example.common.model.dto.res.UserInfoBody;
-import com.example.service.UserService;
+import com.example.service.UserDubboService;
 import com.example.service.user.SubUserQuery;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,8 +16,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Service(version = "1.0.0")
-public class UserServiceImpl implements UserService {
+public class UserDubboServiceImpl implements UserDubboService {
 
+    @Autowired
     private SubUserQuery subUserQuery;
 
     @Override

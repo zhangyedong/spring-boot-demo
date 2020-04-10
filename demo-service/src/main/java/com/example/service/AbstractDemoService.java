@@ -24,7 +24,7 @@ public abstract class AbstractDemoService {
             //返回业务处理
         } catch (Exception e) {
             log.error("系统异常，返回错误");
-            baseResDTO = new BaseResDTO(((BaseRuntimeException)e).getCode(), e.getMessage());
+            baseResDTO = new BaseResDTO(((BaseRuntimeException) e).getCode(), e.getMessage());
         }
         return baseResDTO;
     }

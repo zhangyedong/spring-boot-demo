@@ -10,7 +10,7 @@ import javax.persistence.*;
  * 2020/3/29 18:29
  */
 @Data
-@NamedQuery(name = "User.withNameAndPasswordQuery",
+@NamedQuery(name = "User.withBookNameAndPasswordQuery",
         query = "select u from User u where u.name = ?1 and u.password = ?2")
 @Entity
 public class User {

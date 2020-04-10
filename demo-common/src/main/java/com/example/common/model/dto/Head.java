@@ -1,6 +1,7 @@
 package com.example.common.model.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.example.common.enums.ErrorEnum;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -38,4 +39,16 @@ public class Head implements Serializable {
      */
     @JSONField(name = "server_time")
     private String serverTime;
+
+    public Head() {
+        this.code = ErrorEnum.SYSTEM_ERROR.getCode();
+        this.msg = ErrorEnum.SYSTEM_ERROR.getMsg();
+        this.serverSerialNo = String.valueOf(System.currentTimeMillis());
+    }
+
+    public Head(ErrorEnum errorEnum) {
+        this.code = errorEnum.getCode();
+        this.msg = errorEnum.getMsg();
+        this.serverSerialNo = String.valueOf(System.currentTimeMillis());
+    }
 }

@@ -10,14 +10,14 @@ import java.util.List;
  * zhangyd
  * 2020/4/7 10:30
  */
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserBookRepository extends JpaRepository<User, Long> {
 
     @Override
     List<User> findAll();
 
     User findAllByName(String name);
 
-    List<User> withNameAndPasswordQuery(String name, String password);
+    List<User> withBookNameAndPasswordQuery(String name, String password);
 
     @Override
     User save(User user);

@@ -42,7 +42,7 @@ public class SubUserQuery extends AbstractDemoService {
     public BaseResDTO excution(BaseReqDTO baseReqDTO) {
 
         QueryUserReqDTO reqDTO = (QueryUserReqDTO) baseReqDTO;
-        BaseResDTO<UserInfoBody> bodyBaseResDTO = null;
+        BaseResDTO<UserInfoBody> bodyBaseResDTO = new BaseResDTO<>();
         if (!StringUtils.isEmpty(reqDTO.getName())) {
             UserEntity user = userRepository.findAllByName(reqDTO.getName());
             UserInfoBody body = new UserInfoBody();
@@ -51,7 +51,7 @@ public class SubUserQuery extends AbstractDemoService {
             body.setPhone_num(user.getPhoneNum());
             bodyBaseResDTO.setBody(body);
         }
-        bodyBaseResDTO.setHead(new Head());
+        bodyBaseResDTO.setHead(new Head(ErrorEnum.SUCCESS));
         return bodyBaseResDTO;
     }
 }

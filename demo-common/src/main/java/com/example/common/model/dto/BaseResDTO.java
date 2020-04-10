@@ -18,6 +18,10 @@ public class BaseResDTO<T> implements Serializable {
 
     private T body = null;
 
+    public BaseResDTO(){
+        this.head = new Head();
+    }
+
     public BaseResDTO(Head head, T body) {
         this.head = head;
         this.body = body;

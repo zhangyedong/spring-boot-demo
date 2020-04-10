@@ -1,9 +1,8 @@
 package com.example.demo;
 
 import com.DemoApplication;
-import com.example.book.repository.UserRepository;
-import com.example.demo.model.User;
 import com.example.demo.service.UserService;
+import com.example.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,14 +63,14 @@ public class BookTest {
 //        context.close();
 
         //spring-data jpa
-        System.out.println("-------findAllByName-------"+userRepository.findAllByName("zhangsan"));
-        System.out.println("-------withNameAndPasswordQuery-------"+userRepository.withNameAndPasswordQuery("zhangsan","456"));
+        System.out.println("-------findAllByName-------"+ userRepository.findAllByName("zhangsan"));
+//        System.out.println("-------withNameAndPasswordQuery-------"+ userRepository.withNameAndPasswordQuery("zhangsan","456"));
 //        User user = new User();
 //        user.setName("zhaoliu");
 //        user.setPassword("66666");
 //        user.setPhoneNum("18666666666");
-//        System.out.println("-------save-------"+userRepository.save(user));
-        System.out.println("-------findAll-------"+userRepository.findAll());
+//        System.out.println("-------save-------"+userBookRepository.save(user));
+        System.out.println("-------findAll-------"+ userRepository.findAll());
 
         //spring事务 PlatformTransactionManager接口
 //        声明式事务 @Transactional()

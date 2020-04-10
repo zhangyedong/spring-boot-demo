@@ -2,6 +2,7 @@ package com.example.repository;
 
 import com.example.common.model.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,8 +18,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     UserEntity findAllByName(String name);
 
-    List<UserEntity> withNameAndPasswordQuery(String name, String password);
-
+    @Transactional
     @Override
     UserEntity save(UserEntity user);
 

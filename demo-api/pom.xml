@@ -19,8 +19,9 @@
             <groupId>com.example.demo</groupId>
             <artifactId>demo-common</artifactId>
             <version>${demo.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
-
+    <packaging>jar</packaging>
 
 </project>

@@ -9,7 +9,7 @@ import com.example.common.model.dto.res.UserInfoBody;
  * zhangyd
  * 2020/4/9 15:03
  */
-public interface UserService {
+public interface UserDubboService {
 
     /**
      * 查询用户信息

@@ -13,6 +13,7 @@ import javax.persistence.*;
 @NamedQuery(name = "User.withNameAndPasswordQuery",
         query = "select u from User u where u.name = ?1 and u.password = ?2")
 @Entity
+@Table(name = "user")
 public class UserEntity {
 
     @Id
