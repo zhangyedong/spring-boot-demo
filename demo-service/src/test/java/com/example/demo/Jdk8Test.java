@@ -8,11 +8,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * jdk8
@@ -24,7 +31,8 @@ import java.util.stream.Collectors;
 public class Jdk8Test {
 
     @Test
-    public void test() {
+    public void test() throws IOException {
+        //-------------------------------------- 一、基础知识 -------------------------------------------------
         List<User> userList = new ArrayList<>();
         File[] hiddenFiles = new File(".").listFiles(File::isHidden);
         filterUsers(userList, Jdk8Test::isMoreTwo);
@@ -58,7 +66,90 @@ public class Jdk8Test {
 //        Supplier 提供
 
         //方法引用 lambda的语法糖，他的另外一种写法
-        userList.sort(Comparator.comparing(User::getId));
+        userList.sort(Comparator.comparing(User::getId).reversed()
+                //id相同时，按名称进一步排序
+                .thenComparing(User::getName));
+
+        //id大于10
+        Predicate<User> idMore10User = u -> u.getId() > 10;
+        //id不是大于10的
+        Predicate<User> noIdMore10User = idMore10User.negate();
+        idMore10User.and(u -> u.getPhoneNum().startsWith("185")).or(u -> u.getName().equals("lisi"));
+
+        Function<Integer, Integer> f = x -> x + 1;
+        Function<Integer, Integer> g = x -> x * 2;
+        //复合函数先加1后乘2
+        Function<Integer, Integer> r = f.andThen(g);
+        //复合函数先乘2后加1
+        Function<Integer, Integer> r2 = f.compose(g);
+
+        //取较大较小值
+        BinaryOperator<Integer> bo = BinaryOperator.maxBy(Comparator.naturalOrder());
+        bo.apply(3,4);
+        BinaryOperator<Integer> bo2 = BinaryOperator.minBy(Comparator.naturalOrder());
+        bo2.apply(3,4);
+
+        //-------------------------------------- 二、函数式数据处理 -------------------------------------------------
+
+        //筛选和匹配
+        userList.stream().filter(u -> u.getId() >10)
+                        .sorted(Comparator.comparing(User::getName))
+                        .distinct()
+                        .map(User::getName)
+                        .limit(3) //取前三
+                        .skip(3)//扔掉前三
+                        .collect(Collectors.toList());
+
+        List<Integer> length = userList.stream().map(u -> u.getName().length()).collect(Collectors.toList());
+
+        //映射 flatMap
+        Stream<String> stringStream = Arrays.stream(new String[]{"goodbyte","world"});
+        List<String> s = stringStream.map(w -> w.split(""))
+                .flatMap(Arrays::stream)//把一个流中的每个值都换成另外一种流，然后把所有流连接起来成为一个流
+                .distinct()
+                .collect(Collectors.toList());
+        System.out.println("----jdk8 flatMap-----"+s);
+
+        Stream<Integer> i = Arrays.stream(new Integer[]{1,2,3,4,5});
+        System.out.println(i.map(num -> num*num).collect(Collectors.toList()));
+
+        //查找和匹配 allMatch、 anyMatch、 noneMatch、 findFirst findAny
+        userList.stream().anyMatch(u -> u.getId() == 10); //是否有id=10的
+        Optional<User> o =  userList.stream().filter(u -> u.getId()>10)
+                .findAny();
+        System.out.println(o);
+
+        Stream<Integer> i2 = Arrays.stream(new Integer[]{1,2,3,4,5});
+        i2.filter(num -> num % 2 ==0 )
+                .findFirst()
+                .ifPresent(System.out::println);
+
+        //归约 reduce
+        Stream<Integer> i3 = Arrays.stream(new Integer[]{1,2,3,4,5});
+        System.out.println(i3.reduce(0,(a,b) -> a+b));
+//        System.out.println(i3.reduce(0,Integer::sum)); //求和
+//        System.out.println(i3.reduce(Integer::max)); //最大
+//        System.out.println(i3.reduce(Integer::min)); //最小
+
+        //数值流
+        userList.stream()
+                .mapToLong(User::getId).sum();
+        userList.stream().mapToLong(User::getId).average();
+        Stream<Long> boxed = userList.stream().mapToLong(User::getId).boxed();
+
+        //数值范围
+        IntStream.rangeClosed(1,100).filter(n -> n%2 == 0).count(); //50
+        IntStream.range(1,100).filter(n -> n%2 == 0).count(); //49 不包含结束值
+
+        //创建流
+        Stream.of("Java","Python");
+        Stream.empty();
+        Arrays.stream(new Integer[]{1,2,3});
+
+        Path path = Paths.get("c:/user.txt");
+        Files.lines(path, Charset.forName("UTF-8")).forEach(System.out::println); //一行一行的读
+
+        Stream.generate(Math::random).limit(5).forEach(System.out::println);
     }
 
     public static <T> List<T> filterUsers(List<T> userList, Predicate<T> p) {
