@@ -27,6 +27,7 @@
         <java.version>1.8</java.version>
         <com.alibaba.druid.version>1.0.31</com.alibaba.druid.version>
         <demo.version>0.0.1-SNAPSHOT</demo.version>
+        <com.alibaba.druid.version>1.0.31</com.alibaba.druid.version>
     </properties>
 
     <dependencies>

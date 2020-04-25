@@ -1,13 +1,15 @@
 package com.example.demo;
 
 import com.DemoApplication;
-import com.example.demo.service.UserService;
-import com.example.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * TODO
@@ -15,15 +17,19 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author: zhangyd
  * @date: 2019/10/22 9:52
  */
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {DemoApplication.class})
 public class BookTest {
 
-    @Autowired
-    UserService userService;
+//    @Autowired
+//    UserService userService;
+//
+//    @Autowired
+//    UserRepository userRepository;
 
     @Autowired
-    UserRepository userRepository;
+    RedisTemplate redisTemplate;
 
     @Test
     public void bookTest(){
@@ -63,14 +69,14 @@ public class BookTest {
 //        context.close();
 
         //spring-data jpa
-        System.out.println("-------findAllByName-------"+ userRepository.findAllByName("zhangsan"));
+//        System.out.println("-------findAllByName-------"+ userRepository.findAllByName("zhangsan"));
 //        System.out.println("-------withNameAndPasswordQuery-------"+ userRepository.withNameAndPasswordQuery("zhangsan","456"));
 //        User user = new User();
 //        user.setName("zhaoliu");
 //        user.setPassword("66666");
 //        user.setPhoneNum("18666666666");
 //        System.out.println("-------save-------"+userBookRepository.save(user));
-        System.out.println("-------findAll-------"+ userRepository.findAll());
+//        System.out.println("-------findAll-------"+ userRepository.findAll());
 
         //spring事务 PlatformTransactionManager接口
 //        声明式事务 @Transactional()
@@ -93,6 +99,11 @@ public class BookTest {
 //            e.printStackTrace();
 //        }
 
+        //redis string
+        redisTemplate.opsForValue().set("my_name","张业东",100L, TimeUnit.SECONDS);
+        log.info("--------logback------ redis-value:{}",redisTemplate.opsForValue().get("my_name"));
     }
+
+
 
 }
