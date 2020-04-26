@@ -102,7 +102,7 @@ public class BookTest {
         //redis string
         redisTemplate.opsForValue().set("my_name","张业东",100L, TimeUnit.SECONDS);
         log.info("--------logback------ redis-value:{}",redisTemplate.opsForValue().get("my_name"));
-
+        
     }
 
 
