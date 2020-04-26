@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.DemoApplication;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +103,9 @@ public class BookTest {
         //redis string
         redisTemplate.opsForValue().set("my_name","张业东",100L, TimeUnit.SECONDS);
         log.info("--------logback------ redis-value:{}",redisTemplate.opsForValue().get("my_name"));
-        
+        Assert.assertEquals("zhang",redisTemplate.opsForValue().get("my_name"));
+
+
     }
 
 
