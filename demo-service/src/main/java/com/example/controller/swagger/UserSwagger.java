@@ -22,9 +22,9 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @RestController
 @Slf4j
-@RequestMapping("/api/v1/demo")
-@Api(value = "测试类接口", tags = {""})
-public class DemoSwagger {
+@RequestMapping("/api/v1/user")
+@Api(value = "用户类接口", tags = {""})
+public class UserSwagger {
     @Autowired
     UserDubboService userDubboService;
 

@@ -79,7 +79,11 @@ public class Test {
 //        for(int i=0;i<N;i++)
 //            new Worker(i,semaphore).start();
 
-
+        try {
+            copyFileUseNIO("C:\\user.txt","c:\\user1.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 //    static class Worker extends Thread{

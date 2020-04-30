@@ -1,6 +1,11 @@
 package com.example.demo;
 
 import com.DemoApplication;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.demo.mapper.UserPlusMapper;
+import com.example.demo.model.User;
+import com.example.demo.service.UserPlusService;
+import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,8 +35,11 @@ public class BookTest {
 //    @Autowired
 //    UserRepository userRepository;
 
+//    @Autowired
+//    RedisTemplate redisTemplate;
+
     @Autowired
-    RedisTemplate redisTemplate;
+    UserPlusService userPlusService;
 
     @Test
     public void bookTest(){
@@ -101,11 +110,13 @@ public class BookTest {
 //        }
 
         //redis string
-        redisTemplate.opsForValue().set("my_name","张业东",100L, TimeUnit.SECONDS);
-        log.info("--------logback------ redis-value:{}",redisTemplate.opsForValue().get("my_name"));
-        Assert.assertEquals("zhang",redisTemplate.opsForValue().get("my_name"));
+//        redisTemplate.opsForValue().set("my_name","张业东",100L, TimeUnit.SECONDS);
+//        log.info("--------logback------ redis-value:{}",redisTemplate.opsForValue().get("my_name"));
+//        Assert.assertEquals("张业东1",redisTemplate.opsForValue().get("my_name"));
 
-
+        List<User> userList = userPlusService.findUserAll();
+        Assert.assertEquals(3L,userList.size());
+        userList.forEach(System.out::println);
     }
 
 
