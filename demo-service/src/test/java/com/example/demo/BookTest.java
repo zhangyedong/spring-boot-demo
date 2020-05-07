@@ -1,11 +1,16 @@
 package com.example.demo;
 
 import com.DemoApplication;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.example.demo.mapper.UserPlusMapper;
 import com.example.demo.model.User;
 import com.example.demo.service.UserPlusService;
 import com.example.demo.service.UserService;
+import com.example.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -40,6 +45,9 @@ public class BookTest {
 
     @Autowired
     UserPlusService userPlusService;
+
+    @Autowired
+    UserPlusMapper userPlusMapper;
 
     @Test
     public void bookTest(){
@@ -114,9 +122,63 @@ public class BookTest {
 //        log.info("--------logback------ redis-value:{}",redisTemplate.opsForValue().get("my_name"));
 //        Assert.assertEquals("张业东1",redisTemplate.opsForValue().get("my_name"));
 
+
+
+        //mybatis-plus--------------
         List<User> userList = userPlusService.findUserAll();
-        Assert.assertEquals(3L,userList.size());
+//        Assert.assertEquals(3L,userList.size());
+//        userList.forEach(System.out::println);
+        //allEq
+//        Map<SFunction<User,?>,Object> map = new HashMap<>();
+//        map.put(User::getName,"zhangsan");
+//        List<User> userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().allEq(map));
+        log.info("--------------mybatis-plus--------------");
+        //eq
+//        userPlusMapper.selectList(Wrappers.<User>lambdaQuery().eq(User::getName,"zhangsan").eq(User::getPhoneNum,"18375893885"));
+        //ne 不等于
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().ne(User::getName,"zhangsan"));
+        //gt 大于
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().gt(User::getId,1));
+        //lt 小于
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().lt(User::getId,3));
+        //le 小于等于
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().le(User::getId,2));
+        //between 范围
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().between(User::getId,2,3));
+        //notBetween 范围取反
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().notBetween(User::getId,2,3));
+        //like 模糊匹配
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().like(User::getName,"z"));
+        //notLike 模糊匹配取反
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().notLike(User::getName,"z"));
+        //likeLeft %值
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().likeLeft(User::getName,"z"));
+        //likeRight 值%
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().likeRight(User::getName,"z"));
+        //isNull
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().isNull(User::getName));
+        //isNotNull
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().isNotNull(User::getName));
+        //in
+//        Set<Integer> inSet = new HashSet<>();
+//        inSet.add(1);
+//        inSet.add(3);
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().in(User::getId,inSet));
+        //notIn
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().notIn(User::getId,inSet));
+        //inSql
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().inSql(User::getId,"select id from user where id = 2"));
+        //notInSql
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().notInSql(User::getId,"select id from user where id = 2"));
+        //groupBy
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().groupBy(User::getId,User::getName));
+        //orderByAsc
+//        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().orderByAsc(User::getId,User::getName));
+        //orderByDesc
+        userList = userPlusMapper.selectList(Wrappers.<User>lambdaQuery().orderByDesc(User::getId,User::getName));
         userList.forEach(System.out::println);
+
+
     }
 
 
