@@ -9,7 +9,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 @MapperScan(basePackages = "com.example.demo.mapper")
 @EnableWebMvc
-//@EnableTransactionManagement
 //@ImportResource(value = {"classpath:demo-config.xml"})
 @EnableDubbo
 public class DemoApplication {

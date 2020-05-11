@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.common.enums.GradeEnum;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -19,4 +20,6 @@ public class User implements Serializable {
     private String password;
 
     private String phoneNum;
+
+    private GradeEnum grade;
 }
