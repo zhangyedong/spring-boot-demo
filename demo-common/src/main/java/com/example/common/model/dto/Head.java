@@ -1,7 +1,7 @@
 package com.example.common.model.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.example.common.enums.ErrorEnum;
+import com.example.common.enums.DemoApiEnum;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -41,14 +41,14 @@ public class Head implements Serializable {
     private String serverTime;
 
     public Head() {
-        this.code = ErrorEnum.SYSTEM_ERROR.getCode();
-        this.msg = ErrorEnum.SYSTEM_ERROR.getMsg();
+        this.code = DemoApiEnum.SYSTEM_ERROR.getCode();
+        this.msg = DemoApiEnum.SYSTEM_ERROR.getMsg();
         this.serverSerialNo = String.valueOf(System.currentTimeMillis());
     }
 
-    public Head(ErrorEnum errorEnum) {
-        this.code = errorEnum.getCode();
-        this.msg = errorEnum.getMsg();
+    public Head(DemoApiEnum demoApiEnum) {
+        this.code = demoApiEnum.getCode();
+        this.msg = demoApiEnum.getMsg();
         this.serverSerialNo = String.valueOf(System.currentTimeMillis());
     }
 }

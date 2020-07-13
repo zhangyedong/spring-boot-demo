@@ -1,6 +1,6 @@
 package com.example.service.user;
 
-import com.example.common.enums.ErrorEnum;
+import com.example.common.enums.DemoApiEnum;
 import com.example.common.exception.BaseRuntimeException;
 import com.example.common.model.dto.BaseReqDTO;
 import com.example.common.model.dto.BaseResDTO;
@@ -34,7 +34,7 @@ public class SubUserQuery extends AbstractDemoService {
             reqDTO = (QueryUserReqDTO) baseReqDTO;
         } else {
             log.info("实体转换异常");
-            throw new BaseRuntimeException(ErrorEnum.TRANSFOR_ERROR);
+            throw new BaseRuntimeException(DemoApiEnum.TRANSFOR_ERROR);
         }
     }
 
@@ -51,7 +51,7 @@ public class SubUserQuery extends AbstractDemoService {
             body.setPhone_num(user.getPhoneNum());
             bodyBaseResDTO.setBody(body);
         }
-        bodyBaseResDTO.setHead(new Head(ErrorEnum.SUCCESS));
+        bodyBaseResDTO.setHead(new Head(DemoApiEnum.SUCCESS));
         return bodyBaseResDTO;
     }
 }

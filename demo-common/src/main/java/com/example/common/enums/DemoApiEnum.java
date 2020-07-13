@@ -5,13 +5,13 @@ package com.example.common.enums;
  * zhangyd
  * 2020/4/9 16:43
  */
-public enum ErrorEnum {
+public enum DemoApiEnum {
 
     SUCCESS("000000","请求成功"),
     SYSTEM_ERROR("999999","系统异常"),
     TRANSFOR_ERROR("100001","转换异常错误");
 
-    ErrorEnum(String code,String msg){
+    DemoApiEnum(String code, String msg){
         this.code = code;
         this.msg = msg;
     }
