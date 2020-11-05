@@ -20,10 +20,20 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.beans.Beans;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -211,6 +221,21 @@ public class BookTest {
         iPage.getRecords().forEach(System.out::println);
 
         //--------------mybatis-plus--------------end
+
+
+        //BeanFactory 介绍
+//        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+//        Resource res = resolver.getResource("");
+//        DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
+//        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
+//        reader.loadBeanDefinitions(res);
+//        User user = factory.getBean(User.class);
+//
+//        ApplicationContext context = new ClassPathXmlApplicationContext("com/...");
+//        ApplicationContext context1 = new FileSystemXmlApplicationContext("com/...");
+//        ApplicationContext context2 = new AnnotationConfigApplicationContext(Beans.class);
+//        user = context2.getBean("user",User.class);
+//        Assert.assertNotNull(user);
 
     }
 
