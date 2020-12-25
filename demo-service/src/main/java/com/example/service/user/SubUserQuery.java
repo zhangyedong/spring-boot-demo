@@ -39,7 +39,7 @@ public class SubUserQuery extends AbstractDemoService {
     }
 
     @Override
-    public BaseResDTO excution(BaseReqDTO baseReqDTO) {
+    public BaseResDTO<UserInfoBody> excution(BaseReqDTO baseReqDTO) {
 
         QueryUserReqDTO reqDTO = (QueryUserReqDTO) baseReqDTO;
         BaseResDTO<UserInfoBody> bodyBaseResDTO = new BaseResDTO<>();
