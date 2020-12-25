@@ -1,6 +1,6 @@
 package com.example.common.exception;
 
-import com.example.common.enums.ErrorEnum;
+import com.example.common.enums.DemoApiEnum;
 import lombok.Data;
 
 /**
@@ -21,8 +21,8 @@ public class BaseRuntimeException extends RuntimeException {
         this.message = message;
     }
 
-    public BaseRuntimeException(ErrorEnum errorEnum) {
-        this.code = errorEnum.getCode();
-        this.message = errorEnum.getMsg();
+    public BaseRuntimeException(DemoApiEnum demoApiEnum) {
+        this.code = demoApiEnum.getCode();
+        this.message = demoApiEnum.getMsg();
     }
 }

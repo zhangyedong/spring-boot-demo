@@ -1,0 +1,62 @@
+#自定义参数
+book:
+    author: zhangyd
+
+#dubbo
+dubbo:
+    application:
+        name: demo-user
+    protocol:
+        name: dubbo
+        port: 20881
+    registry:
+        address: zookeeper://192.168.1.123:2181
+#log日志
+logging:
+    config: classpath:logback.xml
+    level:
+        com:
+            example:
+                demo:
+                    mapper: trace
+#mybatis
+mybatis:
+    configuration:
+        map-underscore-to-camel-case: true
+    mapper-locations: classpath:mapper/*.xml
+    type-aliases-package: com.example.demo.model
+
+#mybatis-plus
+mybatis-plus:
+    configuration:
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+        map-underscore-to-camel-case: true
+    global-config:
+        db-column-underline: true
+    mapper-locations: classpath:mapper/*.xml
+    type-aliases-package: com.example.demo.model
+    type-enums-package: com.example.common.enums
+#server
+server:
+    port: 8888
+
+#spring
+spring:
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        password: root
+        url: jdbc:mysql://192.168.1.123:3306/test?useUnicode=true&characterEncoding=utf-8
+        username: root
+    jackson:
+        serialization:
+            indent-output: true
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+    redis:
+        host: 192.168.1.123
+        password: admin
+        port: 6379
+    thymeleaf:
+        cache: false

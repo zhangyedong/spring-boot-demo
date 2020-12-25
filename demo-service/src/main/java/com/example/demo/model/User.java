@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import com.example.common.enums.GradeEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,6 +14,8 @@ import java.io.Serializable;
 @Data
 public class User implements Serializable {
 
+    private static final long serialVersionUID = 6110460440342354746L;
+
     private Integer id;
 
     private String name;
@@ -19,4 +23,6 @@ public class User implements Serializable {
     private String password;
 
     private String phoneNum;
+
+    private GradeEnum grade;
 }

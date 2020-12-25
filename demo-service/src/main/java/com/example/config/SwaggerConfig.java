@@ -6,6 +6,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -25,13 +26,14 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo())
                 .select()
                 // 指定要生成api接口的包路径，这里把controller作为包路径，生成controller中的所有接口
-                .apis(RequestHandlerSelectors.basePackage("com.itcodai.course06.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.example.controller.http"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     /**
      * 构建api文档的详细信息
+     *
      * @return
      */
     private ApiInfo apiInfo() {
@@ -42,7 +44,7 @@ public class SwaggerConfig {
                 .description("Spring Boot demo接口")
                 .termsOfServiceUrl("http://www.fbank.com/")
                 // 设置联系方式
-                .contact("http://www.fbank.com/")
+                .contact(new Contact("zhangyd", "http://www.fbank.com/", "786757521@q.com"))
                 // 设置版本
                 .version("1.0")
                 // 构建

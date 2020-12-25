@@ -20,6 +20,9 @@ public class QueryUserReqDTO extends BaseReqDTO {
     @JSONField(name = "name")
     private String name;
 
+    @JSONField(name = "password")
+    private String password;
+
     @JSONField(name = "phone_num")
     private String phoneNum;
 }

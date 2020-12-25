@@ -14,17 +14,17 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class ScheduledTaskService {
 
-    @Scheduled(fixedRate = 5000)
-    public void reportCurrentTime(){
-        System.out.println("每隔五秒执行一次:"+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-    }
+//    @Scheduled(fixedRate = 5000)
+//    public void reportCurrentTime(){
+//        System.out.println("每隔五秒执行一次:"+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+//    }
 
     /**
      * 指定时间点执行
      *
      */
-    @Scheduled(cron = "0 25 16 ? * *")
-    public void fixTimeExecution(){
-        System.out.println("在指定时间执行："+LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-    }
+//    @Scheduled(cron = "0 25 16 ? * *")
+//    public void fixTimeExecution(){
+//        System.out.println("在指定时间执行："+LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+//    }
 }
