@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingDeque;
 
 /**
  * TODO
@@ -121,6 +124,8 @@ public class Test {
         fi.close();
         fo.close();
     }
+
+    Queue queue = new ArrayBlockingQueue(10);
 
 }
 
