@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.DemoApplication;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,9 +15,13 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.LinkedTransferQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,6 +33,7 @@ import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 
 /**
  * 实战java高并发程序设计
@@ -104,9 +110,53 @@ public class ConcurrentTest {
         LockSupport.unpark(new Thread());
 
 
-        ExecutorService executor = new ThreadPoolExecutor(2,2,5, TimeUnit.SECONDS,new LinkedBlockingQueue<>());
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(2, 2, 5,
+                TimeUnit.SECONDS, new LinkedBlockingQueue<>(), Executors.defaultThreadFactory(), new RejectedExecutionHandler() {
+            @Override
+            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+                System.out.println(r.toString()+"拒绝执行...");
+            }
+        });
         Executors.newFixedThreadPool(5);
         Executors.newSingleThreadExecutor();
+        Executors.newCachedThreadPool();
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        ScheduledExecutorService scheduledExecutorService1 = Executors.newScheduledThreadPool(5);
+        scheduledExecutorService.scheduleWithFixedDelay(()->{
+            try {
+                Thread.sleep(5000);
+                System.out.println(System.currentTimeMillis()/1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        },0,2,TimeUnit.SECONDS);
+
+        executor.execute(()-> System.out.println("执行业务"));
+
+        ThreadFactory threadFactory = new ThreadFactoryBuilder().setDaemon(false).setNameFormat("").build();
+
+        ExecutorService executorService = new ThreadPoolExecutor(5,5,0L,
+                TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>()){
+            //执行前
+            @Override
+            protected void beforeExecute(Thread t,Runnable r){
+                System.out.println("准备执行");
+            }
+            //执行后
+            @Override
+            protected void afterExecute(Runnable r,Throwable t){
+                System.out.println("执行完成");
+            }
+            //线程池退出的时候
+            @Override
+            protected void terminated(){
+                System.out.println("线程池退出");
+            }
+        };
+        executorService.shutdown();
+        Runtime.getRuntime().availableProcessors();
+
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
 
     }
 
