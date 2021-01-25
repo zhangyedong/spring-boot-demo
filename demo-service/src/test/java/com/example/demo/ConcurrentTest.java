@@ -9,13 +9,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import sun.applet.Main;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -157,7 +165,16 @@ public class ConcurrentTest {
         Runtime.getRuntime().availableProcessors();
 
         ForkJoinPool forkJoinPool = new ForkJoinPool();
+        ForkJoinTask<Long> forkJoinTask = forkJoinPool.submit(()->{
+            return 0L;
+        });
+        Collections.synchronizedMap(new HashMap<>());
 
+        ConcurrentLinkedQueue concurrentLinkedQueue = new ConcurrentLinkedQueue<>();
+        CopyOnWriteArrayList copyOnWriteArrayList = new CopyOnWriteArrayList<>();
+        copyOnWriteArrayList.add("a");
+        copyOnWriteArrayList.add("b");
+        copyOnWriteArrayList.get(0);
     }
 
 
