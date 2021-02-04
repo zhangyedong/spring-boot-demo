@@ -9,11 +9,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -150,6 +153,9 @@ public class Jdk8Test {
         Files.lines(path, Charset.forName("UTF-8")).forEach(System.out::println); //一行一行的读
 
         Stream.generate(Math::random).limit(5).forEach(System.out::println);
+
+        CompletableFuture<BigDecimal> results = CompletableFuture.completedFuture(new BigDecimal(BigInteger.ZERO));
+
     }
 
     public static <T> List<T> filterUsers(List<T> userList, Predicate<T> p) {
