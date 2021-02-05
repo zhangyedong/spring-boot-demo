@@ -2,7 +2,6 @@ package com.example.demo;
 
 import com.DemoApplication;
 import com.example.demo.model.Person;
-import com.mongodb.AggregationOptions;
 import com.mongodb.client.model.Collation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +10,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.mongodb.core.FindAndReplaceOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.AggregationOptions;
 import org.springframework.data.mongodb.core.query.BasicUpdate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -56,7 +56,7 @@ public class MongoDBTest {
                 BasicUpdate.update("name", "zhangyd2"), Person.class);
 
         Collation collation = Collation.builder().build();
-        AggregationOptions.builder().collation(collation).build();
+        AggregationOptions build = AggregationOptions.builder().collation(null).build();
 
         mongoTemplate.updateFirst(Query.query(Criteria.where("id").is(1)),
                 BasicUpdate.update("name", "zhangyd2")
@@ -93,8 +93,8 @@ public class MongoDBTest {
         ExampleMatcher exampleMatcher = ExampleMatcher.matching()
                 .withIgnoreCase("name")
                 .withIgnoreNullValues();
-        Example<Person> personExample = Example.of(person,exampleMatcher);
-        
+        Example<Person> personExample = Example.of(person, exampleMatcher);
+
     }
 
 }
