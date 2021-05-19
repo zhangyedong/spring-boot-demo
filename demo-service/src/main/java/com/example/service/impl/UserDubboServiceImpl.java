@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * 2020/4/9 16:22
  */
 @Component
-@Service(version = "1.0.0")
+//@Service(version = "1.0.0")
 public class UserDubboServiceImpl implements UserDubboService {
 
     @Autowired

@@ -11,6 +11,7 @@ import sun.applet.Main;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -175,6 +176,21 @@ public class ConcurrentTest {
         copyOnWriteArrayList.add("a");
         copyOnWriteArrayList.add("b");
         copyOnWriteArrayList.get(0);
+
+        BlockingQueue linkedBlockingQueue = new LinkedBlockingQueue();
+        BlockingQueue arrayBlockingQueue = new ArrayBlockingQueue<>(10);
+        arrayBlockingQueue.offer(null);
+        try {
+            arrayBlockingQueue.put(null);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        AtomicInteger atomicInteger = new AtomicInteger();
+        atomicInteger.incrementAndGet();
+        atomicInteger.getAndIncrement();
+        atomicInteger.addAndGet(1);
+
     }
 
 

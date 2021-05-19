@@ -3,14 +3,14 @@ book:
     author: zhangyd
 
 #dubbo
-dubbo:
-    application:
-        name: demo-user
-    protocol:
-        name: dubbo
-        port: 20881
-    registry:
-        address: zookeeper://192.168.1.123:2181
+#dubbo:
+#    application:
+#        name: demo-user
+#    protocol:
+#        name: dubbo
+#        port: 20881
+#    registry:
+#        address: zookeeper://127.0.0.1:2181
 #log日志
 logging:
     config: classpath:logback.xml
@@ -45,7 +45,7 @@ spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         password: root
-        url: jdbc:mysql://192.168.1.123:3306/test?useUnicode=true&characterEncoding=utf-8
+        url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8
         username: root
     jackson:
         serialization:
@@ -55,7 +55,7 @@ spring:
             ddl-auto: update
         show-sql: true
     redis:
-        host: 192.168.1.123
+        host: 127.0.0.1
         password: admin
         port: 6379
     thymeleaf:
