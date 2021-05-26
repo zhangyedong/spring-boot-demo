@@ -18,9 +18,12 @@ public class ElsasticUser {
     @Id
     private String id;
 
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Keyword, fielddata = true)
     private String name;
 
     @Field(type = FieldType.Integer)
     private Integer age;
+
+    @Field(type = FieldType.Keyword, fielddata = true)
+    private String gender;
 }
