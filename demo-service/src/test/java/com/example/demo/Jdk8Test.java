@@ -15,13 +15,23 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.BinaryOperator;
+import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 /**
@@ -156,6 +166,47 @@ public class Jdk8Test {
 
         CompletableFuture<BigDecimal> results = CompletableFuture.completedFuture(new BigDecimal(BigInteger.ZERO));
 
+        //组合式异步编程 CompletableFuture
+        CompletableFuture<String> stringCompletableFuture = CompletableFuture.supplyAsync(() -> "start");
+
+        CompletableFuture.supplyAsync(() -> "start")
+                .thenApply(str -> str.replace("s","t"))
+                .thenCompose(str -> CompletableFuture.supplyAsync(() -> str.substring(1)))
+                .thenCombine(CompletableFuture.supplyAsync(() -> "a"),(a,b) -> a + b)
+                //异常处理
+                .exceptionally(e -> {
+                    System.out.println(e.getMessage());
+                    return "异常返回";
+                }).thenAccept(System.out::println);
+        try {
+            stringCompletableFuture.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDate localDate = LocalDate.now();
+        LocalDate date1 = LocalDate.of(2014, 3, 18);
+        LocalDate date2 = date1.withYear(2011);
+        LocalDate date3 = date2.withDayOfMonth(25);
+        LocalDate date4 = date3.with(ChronoField.MONTH_OF_YEAR, 9);
+
+        LocalDate date5 = date1.plusWeeks(1);
+        LocalDate date6 = date5.minusYears(3);
+        LocalDate date7 = date6.plus(6, ChronoUnit.MONTHS);
+
+        TemporalAdjusters.lastDayOfMonth();
+        //同一个月中每一周的第几天
+        TemporalAdjusters.dayOfWeekInMonth(1,DayOfWeek.from(date1));
+
+        //1-10阶乘
+        long n = 10;
+        LongStream.rangeClosed(1,n).reduce(1,(a,b) -> a * b);
+
+        Function<User,Boolean> function = Jdk8Test::isMoreTwo;
+
+        //科里化
+        DoubleUnaryOperator convertCtoF = curriedConverter(9.0/5, 32);
     }
 
     public static <T> List<T> filterUsers(List<T> userList, Predicate<T> p) {
@@ -174,5 +225,9 @@ public class Jdk8Test {
 
     public static boolean isMoreThree(User user) {
         return user.getId() > 3;
+    }
+
+    static DoubleUnaryOperator curriedConverter(double f, double b){
+        return (double x) -> x * f + b;
     }
 }

@@ -1,32 +1,27 @@
 package com.example.demo;
 
-import com.DemoApplication;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import sun.applet.Main;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
@@ -34,14 +29,15 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.LongAccumulator;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.StampedLock;
 
 
 /**
@@ -191,6 +187,37 @@ public class ConcurrentTest {
         atomicInteger.getAndIncrement();
         atomicInteger.addAndGet(1);
 
+        StampedLock stampedLock = new StampedLock();
+        long stamp = stampedLock.tryOptimisticRead();
+        stampedLock.unlockWrite(stamp);
+        stampedLock.unlockRead(stamp);
+
+        LongAdder longAdder = new LongAdder();
+        longAdder.increment();
+        longAdder.sum();
+
+        LongAccumulator longAccumulator = new LongAccumulator(Long::max, Long.MIN_VALUE);
+        longAccumulator.accumulate(1);
+        longAccumulator.get();
+        longAccumulator.longValue();
+
+        //组合式异步编程 CompletableFuture
+        CompletableFuture<String> stringCompletableFuture = CompletableFuture.supplyAsync(() -> "start");
+
+        CompletableFuture.supplyAsync(() -> "start")
+                .thenApply(str -> str.replace("s","t"))
+                .thenCompose(str -> CompletableFuture.supplyAsync(() -> str.substring(1)))
+                .thenCombine(CompletableFuture.supplyAsync(() -> "a"),(a,b) -> a + b)
+                //异常处理
+                .exceptionally(e -> {
+                    System.out.println(e.getMessage());
+                    return "异常返回";
+                }).thenAccept(System.out::println);
+        try {
+            stringCompletableFuture.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
 
