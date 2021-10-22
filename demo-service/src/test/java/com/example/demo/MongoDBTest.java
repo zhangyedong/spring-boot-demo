@@ -1,8 +1,10 @@
 package com.example.demo;
 
 import com.DemoApplication;
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo.model.Person;
 import com.mongodb.client.model.Collation;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +12,9 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.mongodb.core.FindAndReplaceOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOptions;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.BasicUpdate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -22,6 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * MongoDBTest
  * zhangyd
  */
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {DemoApplication.class})
 public class MongoDBTest {
@@ -88,12 +93,31 @@ public class MongoDBTest {
         mongoTemplate.remove(Query.query(Criteria.where("id").is(1)), "zhangyd");
         mongoTemplate.findAndRemove(Query.query(Criteria.where("id").is(1)), Person.class);
 
-        MongoJsonSchema.builder().required();
 
-        ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-                .withIgnoreCase("name")
-                .withIgnoreNullValues();
-        Example<Person> personExample = Example.of(person, exampleMatcher);
+        //多条件and
+        Criteria criteria = new Criteria();
+        criteria.andOperator(Criteria.where("age").lt(10),Criteria.where("name").regex("zhangyd"));
+
+        //多条件or
+        criteria.orOperator(Criteria.where("age").lt(10),Criteria.where("name").regex("zhangyd"));
+        Query.query(criteria);
+
+        //聚合
+        Aggregation aggregation = Aggregation.newAggregation(
+                //条件
+                Aggregation.match(Criteria.where("name").regex("zhang")),
+                //根据年龄聚合
+                Aggregation.group("age").count().as("age_count"),
+                //重命名指标名称
+                Aggregation.project("age_count").and("age").previousOperation()
+        );
+
+        AggregationResults<JSONObject> aggregate = mongoTemplate.aggregate(aggregation, mongoTemplate.getCollectionName(Person.class), JSONObject.class);
+        aggregate.getMappedResults().forEach(j -> {
+            Integer age = j.getInteger("age");
+            Long ageCount = j.getLong("age_count");
+            log.info("年龄：{}，数量：{}", age, ageCount);
+        });
 
     }
 
