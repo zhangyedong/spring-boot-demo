@@ -2,10 +2,17 @@ package com.example.demo;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.LongAdder;
+import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.StampedLock;
 
 /**
  * 并发编程之美
@@ -131,43 +138,101 @@ public class ConcurrentBeautifulTest {
 //        threadB.start();
 //    }
 
-    //死锁例子-因互相等待对方资源（解决死锁）,保证申请资源的有序性可解决
-    Thread threadA = new Thread(() -> {
-        synchronized (resourceA){
-            System.out.println("threadA get resourceA...");
+        //死锁例子-因互相等待对方资源（解决死锁）,保证申请资源的有序性可解决
+        Thread threadA = new Thread(() -> {
+            synchronized (resourceA) {
+                System.out.println("threadA get resourceA...");
 
-            try{
-                Thread.sleep(5000);
-            }catch(InterruptedException e){
-                e.printStackTrace();
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("threadA waiting resourceB...");
+                synchronized (resourceB) {
+                    System.out.println("threadA get resourceB...");
+                }
             }
+        });
 
-            System.out.println("threadA waiting resourceB...");
-            synchronized (resourceB){
-                System.out.println("threadA get resourceB...");
+        Thread threadB = new Thread(() -> {
+            synchronized (resourceA) {
+                System.out.println("threadB get resourceA...");
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("threadB waiting resourceB...");
+                synchronized (resourceB) {
+                    System.out.println("threadB get resourceB...");
+                }
             }
-        }
-    });
-
-    Thread threadB = new Thread(() -> {
-        synchronized (resourceA){
-            System.out.println("threadB get resourceA...");
-
-            try{
-                Thread.sleep(5000);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-            }
-
-            System.out.println("threadB waiting resourceB...");
-            synchronized (resourceB){
-                System.out.println("threadB get resourceB...");
-            }
-        }
-    });
+        });
         threadA.start();
         threadB.start();
-}
+
+//        ThreadLocal
+        ThreadLocal<String> threadLocal = ThreadLocal.withInitial(() -> "thread");
+        threadLocal.set("");
+        threadLocal.get();
+        threadLocal.remove();
+
+        ThreadLocalRandom localRandom = ThreadLocalRandom.current();
+        for (int i = 0; i < 10; i++) {
+            localRandom.nextInt(5);
+        }
+
+        AtomicLong atomicLong = new AtomicLong(1);
+        atomicLong.incrementAndGet();
+
+        LongAdder longAdder = new LongAdder();
+        longAdder.increment();
+        longAdder.decrement();
+        longAdder.sum();
+        longAdder.longValue();
+
+        //CopyOnWriteArrayList
+        CopyOnWriteArrayList<Integer> copyOnWriteArrayList = new CopyOnWriteArrayList<>();
+        copyOnWriteArrayList.add(1);
+        copyOnWriteArrayList.addIfAbsent(2);
+
+        //LockSupport
+        LockSupport.park();
+        LockSupport.unpark(threadB);
+
+        //抽象同步队列AQS
+        AbstractQueuedSynchronizer abstractQueuedSynchronizer;
+        //独占读写锁
+        ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
+        ReentrantReadWriteLock.WriteLock writeLock = reentrantReadWriteLock.writeLock();
+        ReentrantReadWriteLock.ReadLock readLock = reentrantReadWriteLock.readLock();
+
+        StampedLock stampedLock = new StampedLock();
+        long numRead = stampedLock.readLock();
+        long numWrite = stampedLock.writeLock();
+        stampedLock.unlockRead(numRead);
+        stampedLock.unlockWrite(numWrite);
+        stampedLock.tryOptimisticRead();
+        //三种锁可以互相转换
+        stampedLock.tryConvertToReadLock(numWrite);
+
+        //并发安全队列
+        ConcurrentLinkedQueue<String> linkedQueue = new ConcurrentLinkedQueue<>();
+        //队尾追加元素
+        linkedQueue.add("1");
+        linkedQueue.offer("2");
+        //队头取元素
+        linkedQueue.element();
+        linkedQueue.peek();
+        //队头取并删元素
+        linkedQueue.remove();
+        linkedQueue.poll();
+        
+    }
 
 
 }
