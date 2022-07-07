@@ -2,8 +2,11 @@ package com.example.demo;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.LongAdder;
@@ -220,7 +223,7 @@ public class ConcurrentBeautifulTest {
         //三种锁可以互相转换
         stampedLock.tryConvertToReadLock(numWrite);
 
-        //并发安全队列
+        //底层单向链表  cas非阻塞队列
         ConcurrentLinkedQueue<String> linkedQueue = new ConcurrentLinkedQueue<>();
         //队尾追加元素
         linkedQueue.add("1");
@@ -231,7 +234,36 @@ public class ConcurrentBeautifulTest {
         //队头取并删元素
         linkedQueue.remove();
         linkedQueue.poll();
-        
+
+        //独占锁 阻塞队列、生产消费模型
+        LinkedBlockingQueue<String> linkedBlockingQueue = new LinkedBlockingQueue<>();
+        linkedBlockingQueue.add("1");
+        linkedBlockingQueue.offer("2");
+        try {
+            linkedBlockingQueue.put("3");
+            linkedBlockingQueue.take();
+            linkedBlockingQueue.poll();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //有界数组阻塞队列 、全局独占锁、size统计精准
+        ArrayBlockingQueue<String> arrayBlockingQueue = new ArrayBlockingQueue<>(10);
+        try {
+            arrayBlockingQueue.put("1");
+            arrayBlockingQueue.offer("2");
+            arrayBlockingQueue.add("3");
+
+            arrayBlockingQueue.take();
+            arrayBlockingQueue.poll();
+            arrayBlockingQueue.peek();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //带优先级的无界阻塞队列、平衡二叉树堆
+        PriorityBlockingQueue<String> priorityBlockingQueue = new PriorityBlockingQueue<>();
+
     }
 
 
